@@ -2,6 +2,7 @@
 
 extern void ldr_test(void);
 extern void my_memcpy_test(void);
+extern void access_label_test(void);
 
 void my_ldr_str_test(void)
 {
@@ -10,6 +11,10 @@ void my_ldr_str_test(void)
 	my_memcpy_test();
 
 	memset(0x200004, 0x55, 102);
+
+	access_label_test();
+
+
 }
 
 void kernel_main(void)

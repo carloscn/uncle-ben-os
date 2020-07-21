@@ -17,6 +17,12 @@ void my_ldr_str_test(void)
 
 }
 
+extern void add_inst_test(void);
+void my_data_process_inst(void)
+{
+	add_inst_test();
+}
+
 void kernel_main(void)
 {
 	uart_init();
@@ -24,6 +30,7 @@ void kernel_main(void)
 
 	/* my test*/
 	my_ldr_str_test();
+	my_data_process_inst();
 
 	while (1) {
 		uart_send(uart_recv());

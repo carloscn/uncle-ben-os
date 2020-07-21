@@ -97,4 +97,24 @@ access_label_test:
 	ldr x1, =my_data  /*加载mydata的地址到x1*/
 
 	ret
-	
+
+/*
+   测试adds, cmp以及adc指令的条件标志位
+*/
+.global add_inst_test
+add_inst_test:
+	mov x0, #0
+	ldr x1, =0xffffffffffffffff
+	mov x2, #3
+	/*测试adds的进位功能，当有溢出发生时，C=1*/
+	adds x0, x1, x1
+	adc x3, xzr, xzr
+
+	/*测试cmp的条件标志位，
+	     当x1 > x2时，C=1
+	     当x1 < x2是， C=0
+	*/
+	cmp x1, x2
+	adc x4, xzr, xzr
+
+	ret

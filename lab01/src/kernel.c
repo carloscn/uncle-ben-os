@@ -21,6 +21,7 @@ extern unsigned long compare_and_return(unsigned long a, unsigned long b);
 
 extern void add_inst_test(void);
 extern void ands_test(void);
+extern void bitfield_test(void);
 void my_data_process_inst(void)
 {
 	unsigned long ret;
@@ -32,6 +33,7 @@ void my_data_process_inst(void)
 	val = compare_and_return(9, 10);
 
 	ands_test();
+	bitfield_test();
 }
 
 void kernel_main(void)

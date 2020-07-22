@@ -118,3 +118,13 @@ add_inst_test:
 	adc x4, xzr, xzr
 
 	ret
+
+/*
+   当arg1 >= arg2 时， 返回 0
+   当arg1 < arg2 时，返回0xffffffffffffffff
+*/
+.global compare_and_return
+compare_and_return:
+	cmp x0, x1
+	sbc x0, xzr, xzr
+	ret

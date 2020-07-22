@@ -99,7 +99,7 @@ access_label_test:
 	ret
 
 /*
-   测试adds, cmp以及adc指令的条件标志位
+   data_process_instr lab1: 测试adds, cmp以及adc指令的条件标志位
 */
 .global add_inst_test
 add_inst_test:
@@ -120,6 +120,7 @@ add_inst_test:
 	ret
 
 /*
+  data_process_instr lab2: cmp和sbc指令的综合运用
    当arg1 >= arg2 时， 返回 0
    当arg1 < arg2 时，返回0xffffffffffffffff
 */
@@ -127,4 +128,18 @@ add_inst_test:
 compare_and_return:
 	cmp x0, x1
 	sbc x0, xzr, xzr
+	ret
+
+/*
+  data_process_instr lab3: 测试ands指令对Z标志位的影响
+*/
+.global ands_test
+ands_test:
+	mov x1, #0x3
+	mov x2, #0
+	//mov x2, #2
+	ands x3, x1, x2
+
+	/*读取NZCV寄存器，查看Z标志位是否为1， 见armv8.6手册第C5.2.9章*/
+	mrs x0, nzcv
 	ret

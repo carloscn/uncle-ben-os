@@ -20,6 +20,7 @@ void my_ldr_str_test(void)
 extern unsigned long compare_and_return(unsigned long a, unsigned long b);
 
 extern void add_inst_test(void);
+extern void ands_test(void);
 void my_data_process_inst(void)
 {
 	unsigned long ret;
@@ -29,6 +30,8 @@ void my_data_process_inst(void)
 
 	ret = compare_and_return(10, 9);
 	val = compare_and_return(9, 10);
+
+	ands_test();
 }
 
 void kernel_main(void)

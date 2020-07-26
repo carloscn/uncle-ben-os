@@ -170,3 +170,31 @@ bitfield_test:
 	/*读取AES域的值：判断是否支持AES指令*/
 	ubfx x2, x1, #4, #4
 	ret
+
+/*
+   compare_branch lab1: 测试cmp和cmn指令以及条件操作后缀
+*/
+.global cmp_cmn_test
+cmp_cmn_test:
+  /* 测试CMN指令*/
+	mov x1, 1
+	mov x2, -3
+1:
+	cmn x1, x2
+	add x2, x2, 1
+	/*查看NZCV操作后缀*/
+	mrs x0, nzcv
+	/*mi： 负数*/
+	b.mi 1b
+
+   /*测试CMP指令*/
+   mov x2, 3
+2:
+	cmp x2, x1
+	add x1, x1, 1
+	/*查看NZCV操作后缀*/
+	mrs x0, nzcv
+	/*cs: 无符号数大于等于*/
+	b.cs 2b
+
+	ret

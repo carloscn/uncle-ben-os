@@ -216,12 +216,16 @@ csel_test:
 */
 .global bl_test
 bl_test:
+    /*
+    把x30保存到临时寄存器里，以免子函数破坏了父函数的返回地址
+    */
+    mov x6, x30
 	mov x0, 1
 	mov x1, 3
 	bl csel_test
 
     /*
-    小明同学写了上述汇编，发现执行bl_test函数的ret指令就跑飞了，
-    这是咋回事？
+    恢复bl_test函数的返回地址, 否则会跑飞
     */
+    mov x30, x6
 	ret

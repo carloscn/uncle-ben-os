@@ -25,6 +25,7 @@ extern void bitfield_test(void);
 extern void cmp_cmn_test(void);
 extern unsigned long csel_test(unsigned long r, unsigned long b);
 extern void bl_test(void);
+extern void adrp_test(void);
 void my_data_process_inst(void)
 {
 	unsigned long ret;
@@ -41,6 +42,8 @@ void my_data_process_inst(void)
 	val = csel_test(1, 3);
 
 	bl_test();
+
+	adrp_test();
 }
 
 void kernel_main(void)

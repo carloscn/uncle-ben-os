@@ -26,10 +26,13 @@ extern void cmp_cmn_test(void);
 extern unsigned long csel_test(unsigned long r, unsigned long b);
 extern void bl_test(void);
 extern void adrp_test(void);
+extern unsigned long my_atomic_write(long data);
+extern void atomic_set(unsigned long a, unsigned long b);
 void my_data_process_inst(void)
 {
 	unsigned long ret;
 	unsigned long val;
+	unsigned long p1 = 0;
 
 	add_inst_test();
 
@@ -44,6 +47,10 @@ void my_data_process_inst(void)
 	bl_test();
 
 	adrp_test();
+
+	val = my_atomic_write(0x345);
+
+	atomic_set(0x11, &p1);
 }
 
 void kernel_main(void)

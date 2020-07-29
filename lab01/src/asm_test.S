@@ -1,3 +1,4 @@
+
 #define MY_LABEL 0x20
 
 .global ldr_test
@@ -38,7 +39,7 @@ ldr_test:
 
 	//lab4: 观察ldr加载label
 	/* 请观察 x6和x7的值*/
-	ldr x6, MY_LABEL
+	ldr w6, MY_LABEL
 	ldr x7, =MY_LABEL
 
 	ret
@@ -62,6 +63,7 @@ my_memcpy_test:
 /*lab7 : label access test*/
 #define my_label 0x30
 
+.align 3
 .globl string1
 string1:
 	.string "Boot at EL"

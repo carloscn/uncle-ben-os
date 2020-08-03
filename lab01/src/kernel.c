@@ -89,8 +89,13 @@ found:
     return 0;
 }
 
+extern unsigned long macro_test_1(long a, long b);
+extern unsigned long macro_test_2(long a, long b);
+
 void kernel_main(void)
 {
+	unsigned long val = 0;
+
 	uart_init();
 	uart_send_string("Welcome BenOS!\r\n");
 
@@ -100,6 +105,8 @@ void kernel_main(void)
 
 	/*汇编器lab1：查表*/
 	print_func_name(0x800880);
+	val = macro_test_1(5, 5);
+	val = macro_test_2(5, 5);
 
 	while (1) {
 		uart_send(uart_recv());

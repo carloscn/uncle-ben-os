@@ -1,3 +1,5 @@
+TEXT_ROM = 0x90000;
+
 SECTIONS
 {
 	/*
@@ -18,15 +20,22 @@ SECTIONS
 	 * text代码段
 	 */
 	_text = .;
-	.text : { *(.text) }
+	.text : AT(TEXT_ROM)
+	{
+		*(.text)
+	}
 	_etext = .;
 
 	/*
 	 * 只读数据段
 	 */
 	_rodata = .;
-	.rodata : { *(.rodata) }
+	.rodata : AT(ADDR(.rodata))
+	{
+		*(.rodata)
+	}
 	_erodata = .;
+
 
 	/*
 	 * 数据段
@@ -34,6 +43,7 @@ SECTIONS
 	_data = .;
 	.data : { *(.data) }
 	_edata = .;
+
 
 	/*
 	 * bss段

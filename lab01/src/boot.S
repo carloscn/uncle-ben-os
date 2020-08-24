@@ -52,6 +52,11 @@ el2_entry:
 el1_entry:
 	bl print_el
 
+	/* 设置异常向量表基地址到vbar寄存器 */
+	ldr     x5, =vectors
+	msr     vbar_el1, x5
+	isb
+
 	adr	x0, _bss
 	adr	x1, _ebss
 	sub	x1, x1, x0

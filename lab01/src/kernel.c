@@ -220,8 +220,8 @@ static void test_sysregs(void)
 	el = read_sysreg(CurrentEL);
 	printk("el = %d\n", el >> 2);
 
-	write_sysreg(0x10000, vbar_el1);
-	printk("read vbar: 0x%x\n", read_sysreg(vbar_el1));
+	//write_sysreg(0x10000, vbar_el2);
+	//printk("read vbar: 0x%x\n", read_sysreg(vbar_el2));
 }
 
 static int test_asm_goto(int a)
@@ -240,6 +240,22 @@ label:
 	printk("%s: a = %d\n", __func__, a);
 	return 0;
 }
+
+static const char * const bad_mode_handler[] = {
+	"Sync Abort",
+	"IRQ",
+	"FIQ",
+	"SError"
+};
+
+void bad_mode(struct pt_regs *regs, int reason, unsigned int esr)
+{
+	printk("Bad mode for %s handler detected, far:0x%x esr:0x%x\n",
+			bad_mode_handler[reason], read_sysreg(far_el1),
+			esr);
+}
+
+extern void trigger_alignment(void);
 
 void kernel_main(void)
 {
@@ -270,6 +286,8 @@ void kernel_main(void)
 	test_sysregs();
 
 	test_asm_goto(1);
+
+	trigger_alignment();
 
 	while (1) {
 		uart_send(uart_recv());

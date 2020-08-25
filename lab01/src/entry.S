@@ -88,11 +88,11 @@ el0_fiq_invalid:
 el0_error_invalid:
 	inv_entry 0, BAD_ERROR
 
-string_test:
-	.string "t"
+//string_test:
+//	.string "t"
 
 .global trigger_alignment
 trigger_alignment:
 	ldr x0, =0x80002
-	ldr x1, [x0]
+	str wzr, [x0]
 	ret

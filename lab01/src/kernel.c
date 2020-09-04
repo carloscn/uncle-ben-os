@@ -1,5 +1,6 @@
 #include "uart.h"
 #include "esr.h"
+#include "irq.h"
 
 extern void ldr_test(void);
 extern void my_memcpy_test(void);
@@ -400,7 +401,11 @@ void kernel_main(void)
 
 	test_asm_goto(1);
 
-	trigger_alignment();
+	//trigger_alignment();
+	printk("done\n");
+
+	timer_init();
+	raw_local_irq_enable();
 
 	while (1) {
 		uart_send(uart_recv());

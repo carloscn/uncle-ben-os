@@ -1,6 +1,7 @@
 #include "uart.h"
 #include "esr.h"
 #include "irq.h"
+#include "asm/base.h"
 
 extern void ldr_test(void);
 extern void my_memcpy_test(void);
@@ -403,6 +404,8 @@ void kernel_main(void)
 
 	//trigger_alignment();
 	printk("done\n");
+
+	gic_init(0, GIC_V2_DISTRIBUTOR_BASE, GIC_V2_CPU_INTERFACE_BASE);
 
 	timer_init();
 	raw_local_irq_enable();

@@ -4,6 +4,7 @@
 
 void irq_handle(void)
 {
+#if 0
 	unsigned int irq = readl(ARM_LOCAL_IRQ_SOURCE0);
 
 	switch (irq) {
@@ -13,4 +14,7 @@ void irq_handle(void)
 	default:
 		printk("Unknown pending irq: %x\r\n", irq);
 	}
+#else
+	gic_handle_irq();
+#endif
 }

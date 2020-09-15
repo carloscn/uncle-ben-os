@@ -23,4 +23,6 @@
 #define LOCAL_TIMER_INT         (1 << 11)
 #define CNTPNSIRQ_Int           (1 << 1)
 
+#define GENERIC_TIMER_IRQ 30
+
 void handle_timer_irq(void);

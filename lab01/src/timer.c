@@ -42,6 +42,8 @@ void timer_init(void)
 	generic_timer_init();
 	generic_timer_reset(val);
 
+	gicv2_unmask_irq(GENERIC_TIMER_IRQ);
+
 	enable_timer_interrupt();
 }
 

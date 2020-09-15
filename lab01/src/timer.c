@@ -52,3 +52,26 @@ void handle_timer_irq(void)
 	generic_timer_reset(val);
 	printk("Core0 Timer interrupt received\r\n");
 }
+
+static unsigned int stimer_val = 0;
+static unsigned int sval = 200000;
+
+void system_timer_init(void)
+{
+	stimer_val = readl(TIMER_CLO);
+	stimer_val += sval;
+	writel(stimer_val, TIMER_C1);
+
+	gicv2_unmask_irq(SYSTEM_TIMER1_IRQ);
+
+	/* enable system timer*/
+	writel(SYSTEM_TIMER_IRQ_1, ENABLE_IRQS_0);
+}
+
+void handle_stimer_irq(void)
+{
+	stimer_val += sval;
+	writel(stimer_val, TIMER_C1);
+	writel(TIMER_CS_M1, TIMER_CS);
+	printk("Sytem Timer1 interrupt \n");
+}

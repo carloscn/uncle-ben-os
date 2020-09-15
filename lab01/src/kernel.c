@@ -407,7 +407,8 @@ void kernel_main(void)
 
 	gic_init(0, GIC_V2_DISTRIBUTOR_BASE, GIC_V2_CPU_INTERFACE_BASE);
 
-	timer_init();
+	//timer_init();
+	system_timer_init();
 	raw_local_irq_enable();
 
 	while (1) {

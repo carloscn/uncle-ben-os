@@ -2,6 +2,7 @@
 #include "esr.h"
 #include "irq.h"
 #include "asm/base.h"
+#include "mm.h"
 
 extern void ldr_test(void);
 extern void my_memcpy_test(void);
@@ -361,6 +362,14 @@ void parse_esr(unsigned int esr)
 	}
 }
 
+void panic(void)
+{
+	printk("Kernel panic\n");
+
+	while (1)
+		;
+}
+
 void bad_mode(struct pt_regs *regs, int reason, unsigned int esr)
 {
 	printk("Bad mode for %s handler detected, far:0x%x esr:0x%x - %s\n",
@@ -368,6 +377,45 @@ void bad_mode(struct pt_regs *regs, int reason, unsigned int esr)
 			esr, esr_get_class_string(esr));
 
 	parse_esr(esr);
+
+	panic();
+}
+
+static int test_access_map_address(void)
+{
+	unsigned long address = TOTAL_MEMORY - 4096;
+
+	*(unsigned long *)address = 0x55;
+
+	printk("%s access 0x%x done\n", __func__, address);
+
+	return 0;
+}
+
+/*
+ * 访问一个没有建立映射的地址
+ * 应该会触发一级页表访问错误。
+ *
+ * Translation fault, level 1
+ *
+ * 见armv8.6手册第2995页
+ */
+static int test_access_unmap_address(void)
+{
+	unsigned long address = TOTAL_MEMORY + 4096;
+
+	*(unsigned long *)address = 0x55;
+
+	printk("%s access 0x%x done\n", __func__, address);
+
+	return 0;
+}
+
+
+static void test_mmu(void)
+{
+	test_access_map_address();
+	test_access_unmap_address();
 }
 
 extern void trigger_alignment(void);
@@ -404,6 +452,9 @@ void kernel_main(void)
 
 	//trigger_alignment();
 	printk("done\n");
+
+	paging_init();
+	test_mmu();
 
 	gic_init(0, GIC_V2_DISTRIBUTOR_BASE, GIC_V2_CPU_INTERFACE_BASE);
 

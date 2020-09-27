@@ -1,3 +1,4 @@
+
 TEXT_ROM = 0x90000;
 
 SECTIONS
@@ -29,6 +30,7 @@ SECTIONS
 	/*
 	 * 只读数据段
 	 */
+	. = ALIGN(4096);
 	_rodata = .;
 	.rodata :
 	{
@@ -42,6 +44,9 @@ SECTIONS
 	 */
 	_data = .;
 	.data : { *(.data) }
+	. = ALIGN(4096);
+	idmap_pg_dir = .;
+	. += 4096;
 	_edata = .;
 
 

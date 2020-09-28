@@ -146,16 +146,8 @@ static void create_identical_mapping(void)
 	unsigned long start;
 	unsigned long end;
 
-	/*map text*/
-	start = (unsigned long)_text_boot;
-	end = (unsigned long)_etext;
-	__create_pgd_mapping((pgd_t *)idmap_pg_dir, start, start,
-			end - start, PAGE_KERNEL_ROX,
-			early_pgtable_alloc,
-			0);
-
 	/*map memory*/
-	start = PAGE_ALIGN((unsigned long)_etext);
+	start = (unsigned long)_text_boot;
 	end = TOTAL_MEMORY;
 	__create_pgd_mapping((pgd_t *)idmap_pg_dir, start, start,
 			end - start, PAGE_KERNEL,

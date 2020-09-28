@@ -235,4 +235,6 @@ void paging_init(void)
 	enable_mmu();
 
 	printk("enable mmu done\n");
+
+	dump_pgtable();
 }

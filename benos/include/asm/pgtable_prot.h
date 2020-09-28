@@ -1,6 +1,7 @@
 #ifndef ASM_PGTABLE_PROT_H
 #define ASM_PGTABLE_PROT_H
 
+#include <type.h>
 #include <asm/pgtable_hwdef.h>
 
 /*
@@ -26,6 +27,9 @@
 #define PROT_NORMAL (PROT_DEFAULT | PTE_PXN | PTE_UXN | PTE_DIRTY | PTE_WRITE | PTE_ATTRINDX(MT_NORMAL))
 
 #define PAGE_KERNEL PROT_NORMAL
+
+#define SWAPPER_PMD_FLAGS       (PMD_TYPE_SECT | PMD_SECT_AF | PMD_SECT_S)
+#define SWAPPER_MM_MMUFLAGS     (PMD_ATTRINDX(MT_NORMAL) | SWAPPER_PMD_FLAGS)
 
 #endif /*ASM_PGTABLE_PROT_H*/
 

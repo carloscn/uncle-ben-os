@@ -490,6 +490,8 @@ void kernel_main(void)
 {
 	unsigned long val = 0;
 
+	paging_init();
+
 	uart_init();
 	init_printk_done();
 	uart_send_string("Welcome BenOS!\r\n");
@@ -519,7 +521,8 @@ void kernel_main(void)
 	//trigger_alignment();
 	printk("done\n");
 
-	paging_init();
+	dump_pgtable();
+
 	test_walk_pgtable();
 	test_mmu();
 

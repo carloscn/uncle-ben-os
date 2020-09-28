@@ -26,7 +26,7 @@ $(BUILD_DIR)/%_c.o: $(SRC_DIR)/%.c
 	$(ARMGNU)-gcc $(COPS) -MMD -c $< -o $@
 
 $(BUILD_DIR)/%_s.o: $(SRC_DIR)/%.S
-	$(ARMGNU)-gcc $(ASMOPS) -MMD -c $< -o $@
+	$(ARMGNU)-gcc $(ASMOPS) -MMD -c -D__ASSEMBLY__ $< -o $@
 
 C_FILES = $(wildcard $(SRC_DIR)/*.c)
 ASM_FILES = $(wildcard $(SRC_DIR)/*.S)

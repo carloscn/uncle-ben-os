@@ -49,6 +49,9 @@ SECTIONS
 	.data : { *(.data) }
 	. = ALIGN(4096);
 	idmap_pg_dir = .;
+	. += 3 * 4096;
+	idmap_pg_end = .;
+	kernel_sp = .;
 	. += 4096;
 	_edata = .;
 
@@ -72,4 +75,6 @@ SECTIONS
 	. = ALIGN(4096);
 	init_pg_dir = .;
 	. += 4096;
+
+	_end = .;
 }

@@ -3,6 +3,7 @@
 
 #define HCR_HOST_NVHE_FLAGS (HCR_RW)
 
+#define SCTLR_ELx_C     (1<<2) /*data cache enable*/
 #define SCTLR_ELx_M	(1<<0)
 
 #define SCTLR_EE_LITTLE_ENDIAN          (0 << 25)

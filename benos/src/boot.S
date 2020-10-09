@@ -108,10 +108,10 @@ enable_mmu:
 		     MAIR(0xbb, MT_NORMAL_WT)
 	msr	mair_el1, x5
 
-	ldr	x10, =TCR_TxSZ(VA_BITS) | TCR_TG_FLAGS
+	ldr	x10, =TCR_TxSZ(VA_BITS) | TCR_TG_FLAGS | TCR_CACHE_FLAGS
 	msr	tcr_el1, x10
 
-	ldr x3, =SCTLR_ELx_M
+	ldr x3, =(SCTLR_ELx_M | SCTLR_ELx_C)
 
 	adrp	x0, idmap_pg_dir
 	msr ttbr0_el1, x0

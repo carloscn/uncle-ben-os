@@ -59,9 +59,13 @@ void my_data_process_inst(void)
 	 * 在树莓派4上跑ldxr和stxr指令会系统宕机（A72核心不支持 通过ldxr指令来访问device memory），
 但是在QEMU上能跑
 	 */
-	//val = my_atomic_write(0x345);
+	val = my_atomic_write(0x345);
 
-	//atomic_set(0x11, &p1);
+	printk("my_atomic_write: 0x%x\n", val);
+
+	atomic_set(0x11, &p1);
+
+	printk("atomic_set: 0x%x\n", p1);
 }
 
 extern unsigned long func_addr[];

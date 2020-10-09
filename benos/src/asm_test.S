@@ -327,3 +327,9 @@ macro_test_2:
 
 	mov x30, x9
 	ret
+
+.global mmu_at_test
+mmu_at_test:
+	at s1e1r, x0
+	mrs x0, par_el1 
+	ret

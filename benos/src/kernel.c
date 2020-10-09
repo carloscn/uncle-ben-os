@@ -418,9 +418,40 @@ static int test_access_unmap_address(void)
 	return 0;
 }
 
+extern unsigned long mmu_at_test(unsigned long addr);
+
+static unsigned long parse_par_el1(unsigned long val)
+{
+	int ret = val & 1;
+	printk("Address Translation instruction %s\n", (ret == 0) ? "successfully" : "failed");
+	if (ret)
+		return -1;
+
+	unsigned long pa = (val & PAGE_MASK) & 0xffffffffff;
+	printk("par_el1:0x%lx, PA: 0x%lx\n", val, pa);
+
+	printk("  NS=%u\n", (val >> 9) & 1);
+	printk("  SH=%u\n", (val >> 7) & 3);
+	printk("  ATTR=0x%x\n", val >> 56);
+
+	return pa;
+}
 
 static void test_mmu(void)
 {
+	unsigned long par_el1;
+	unsigned long pa;
+
+	unsigned long addr = TOTAL_MEMORY - 4096;
+	par_el1 = mmu_at_test(addr);
+	pa = parse_par_el1(par_el1);
+	printk("test AT instruction %s\n", (addr == pa) ? "done" : "failed");
+
+	addr = TOTAL_MEMORY + 4096;
+	par_el1 = mmu_at_test(addr);
+	pa = parse_par_el1(par_el1);
+	printk("test AT instruction %s\n", (addr == pa) ? "done" : "failed");
+
 	test_access_map_address();
 	test_access_unmap_address();
 }

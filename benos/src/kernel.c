@@ -444,7 +444,7 @@ static pte_t *walk_pgtable(unsigned long address)
 	//printk("ben: pmd=0x%llx\n", *pmd);
 	if (pmd == NULL || pmd_none(*pmd))
 		return NULL;
-	else if (pmd_val(*pmd) & PMD_TYPE_SECT) {
+	else if ((pmd_val(*pmd) & PMD_TYPE_MASK) == PMD_TYPE_SECT) {
 		return (pte_t *)pmd;
 	}
 

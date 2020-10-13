@@ -3,6 +3,9 @@
 #include "irq.h"
 #include "asm/base.h"
 #include "mm.h"
+#include <asm/pgtable.h>
+#include <asm/pgtable_prot.h>
+#include <asm/pgtable_hwdef.h>
 
 extern void ldr_test(void);
 extern void my_memcpy_test(void);
@@ -418,6 +421,69 @@ static void test_mmu(void)
 	test_access_unmap_address();
 }
 
+extern char idmap_pg_dir[];
+
+static pte_t *walk_pgtable(unsigned long address)
+{
+	pgd_t *pgd = NULL;
+	pud_t *pud;
+	pte_t *pte;
+	pmd_t *pmd;
+
+	/* pgd */
+	pgd = pgd_offset_raw((pgd_t *)idmap_pg_dir, address);
+	if (pgd == NULL || pgd_none(*pgd))
+		return NULL;
+
+	//printk("ben: pgd=0x%llx\n", *pgd);
+	pud = pud_offset_phys(pgd, address);
+	if (pud ==NULL || pud_none(*pud))
+		return NULL;
+
+	pmd = pmd_offset_phys(pud, address);
+	//printk("ben: pmd=0x%llx\n", *pmd);
+	if (pmd == NULL || pmd_none(*pmd))
+		return NULL;
+	else if (pmd_val(*pmd) & PMD_TYPE_SECT) {
+		return (pte_t *)pmd;
+	}
+
+	pte = pte_offset_phys(pmd, address);
+	if ((pte == NULL) || pte_none(*pte))
+		return NULL;
+
+	//printk("ben: pte=0x%llx\n", *pte);
+
+	return pte;
+}
+
+extern char readonly_page[];
+
+static void test_walk_pgtable(void)
+{
+	pte_t pte, *ptep;
+	pte_t pte_new;
+
+	unsigned long addr = (unsigned long)readonly_page;
+
+	ptep = walk_pgtable(addr);
+
+	pte = *ptep;
+
+	printk("page:0x%lx, pte value: 0x%lx\n", addr, pte);
+
+	pte_new = pte_mkyoung(pte);
+	pte_new = pte_mkwrite(pte_new);
+
+	set_pte(ptep, pte_new);
+
+	/*dump addr's pte*/
+	walk_pgd((pgd_t *)idmap_pg_dir, addr, PAGE_SIZE);
+
+	memset((unsigned long)readonly_page, 0x55, 100);
+	printk("write readonly page done\n");
+}
+
 extern void trigger_alignment(void);
 
 void kernel_main(void)
@@ -454,6 +520,7 @@ void kernel_main(void)
 	printk("done\n");
 
 	paging_init();
+	test_walk_pgtable();
 	test_mmu();
 
 	gic_init(0, GIC_V2_DISTRIBUTOR_BASE, GIC_V2_CPU_INTERFACE_BASE);

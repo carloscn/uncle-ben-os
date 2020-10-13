@@ -219,7 +219,7 @@ static void walk_pud(pgd_t *pgdp, unsigned long start, unsigned long end)
 	} while (pudp++, addr = next, addr != end);
 }
 
-static void walk_pgd(pgd_t *pgd, unsigned long start, unsigned long size)
+void walk_pgd(pgd_t *pgd, unsigned long start, unsigned long size)
 {
 	unsigned long end = start + size;
 	unsigned long next, addr = start;

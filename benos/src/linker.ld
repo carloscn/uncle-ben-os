@@ -24,6 +24,9 @@ SECTIONS
 	.text :
 	{
 		*(.text)
+	. = ALIGN(4096);
+	readonly_page = .;
+	. += 4096;
 	}
 	_etext = .;
 

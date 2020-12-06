@@ -3,6 +3,7 @@
 #include "irq.h"
 #include "asm/base.h"
 #include "mm.h"
+#include "io.h"
 #include <asm/pgtable.h>
 #include <asm/pgtable_prot.h>
 #include <asm/pgtable_hwdef.h>
@@ -208,25 +209,6 @@ static void my_ops_test(void)
 	printk("test andnot: p=0x%x\n", p);
 }
 
-/*
- * 在带参数的宏，#号作为一个预处理运算符,
- * 可以把记号转换成字符串
- *
- * 下面这句话会在预编译阶段变成：
- *  asm volatile("mrs %0, " "reg" : "=r" (__val)); __val; });
- */
-#define read_sysreg(reg) ({ \
-		unsigned long _val; \
-		asm volatile("mrs %0," #reg \
-		: "=r"(_val)); \
-		_val; \
-})
-
-#define write_sysreg(val, reg) ({ \
-		unsigned long _val = (unsigned long)val; \
-		asm volatile("msr " #reg ", %x0" \
-		:: "rZ"(_val)); \
-})
 
 static void test_sysregs(void)
 {
@@ -559,6 +541,7 @@ void kernel_main(void)
 	dump_pgtable();
 
 	test_walk_pgtable();
+	init_cache_info();
 	test_mmu();
 
 	gic_init(0, GIC_V2_DISTRIBUTOR_BASE, GIC_V2_CPU_INTERFACE_BASE);

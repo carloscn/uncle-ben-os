@@ -56,5 +56,7 @@ typedef unsigned int size_t;
 #define DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
+#define cacheline_aligned __attribute__((__aligned__(64)))
+
 #endif
 #endif /*BENOS_TYPE_H*/

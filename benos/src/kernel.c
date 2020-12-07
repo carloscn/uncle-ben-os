@@ -7,6 +7,9 @@
 #include <asm/pgtable.h>
 #include <asm/pgtable_prot.h>
 #include <asm/pgtable_hwdef.h>
+#include <type.h>
+
+extern unsigned long volatile cacheline_aligned jiffies;
 
 extern void ldr_test(void);
 extern void my_memcpy_test(void);
@@ -435,7 +438,7 @@ static void test_mmu(void)
 	printk("test AT instruction %s\n", (addr == pa) ? "done" : "failed");
 
 	test_access_map_address();
-	test_access_unmap_address();
+	//test_access_unmap_address();
 }
 
 extern char idmap_pg_dir[];
@@ -501,6 +504,28 @@ static void test_walk_pgtable(void)
 	printk("write readonly page done\n");
 }
 
+#define NOOP 10000
+static void test_cache(void)
+{
+	unsigned long start = jiffies;
+
+	unsigned long page;
+	int i, j;
+	char var;
+
+	page = get_free_page();
+
+	for (j = 0; j < NOOP; j++) {
+		flush_cache_range(page, page + PAGE_SIZE -1);
+		for (i = 0; i < PAGE_SIZE; i++) {
+			var = *((char *)(page + i));
+			//*((char *)(page + i)) = 0x55;
+		}
+	}
+
+	printk("%s time %llu jiffies\n", __func__, jiffies - start);
+}
+
 extern void trigger_alignment(void);
 
 void kernel_main(void)
@@ -546,9 +571,11 @@ void kernel_main(void)
 
 	gic_init(0, GIC_V2_DISTRIBUTOR_BASE, GIC_V2_CPU_INTERFACE_BASE);
 
-	//timer_init();
-	system_timer_init();
+	timer_init();
+	//system_timer_init();
 	raw_local_irq_enable();
+
+	test_cache();
 
 	while (1) {
 		uart_send(uart_recv());

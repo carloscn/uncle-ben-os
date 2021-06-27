@@ -15,9 +15,28 @@ extern void ldr_test(void);
 extern void my_memcpy_test(void);
 extern void access_label_test(void);
 
+#define SIZE 256
+static char a[SIZE];
+static char b[SIZE];
+
 static void my_fp_neon_test(void)
 {
+	int i;
+
 	fp_test();
+
+	/* 使用LD1/ST1指令来实现memcpy */
+	for (i = 0; i < SIZE; i++)
+		a[i] = i;
+
+	neon_test(&a, &b, SIZE);
+
+	for (i = 0; i < SIZE; i++) {
+		if (a[i] != b[i]) {
+			printk("data error\n");
+			panic();
+		}
+	}
 }
 
 void my_ldr_str_test(void)

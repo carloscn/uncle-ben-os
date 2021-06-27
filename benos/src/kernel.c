@@ -15,6 +15,11 @@ extern void ldr_test(void);
 extern void my_memcpy_test(void);
 extern void access_label_test(void);
 
+static void my_fp_neon_test(void)
+{
+	fp_test();
+}
+
 void my_ldr_str_test(void)
 {
 
@@ -559,6 +564,8 @@ void kernel_main(void)
 	test_sysregs();
 
 	test_asm_goto(1);
+
+	my_fp_neon_test();
 
 	//trigger_alignment();
 	printk("done\n");

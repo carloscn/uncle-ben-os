@@ -9,7 +9,9 @@ my_atomic_data:
 atomic_set:
 1:
 	ldxr x2, [x1]
-	orr x2, x2, x0
+	mov x4, #1
+	lsl x5, x4, x0
+	orr x2, x2, x5
 	stxr w3, x2, [x1]
 	cbnz w3, 1b
 	ret	

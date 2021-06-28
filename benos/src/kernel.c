@@ -20,6 +20,22 @@ static char a[SIZE];
 static char b[SIZE];
 static char c[SIZE];
 
+#define PIC_SIZE (80 *60 * 3)
+static char rgb24[PIC_SIZE];
+static char bgr24_c[PIC_SIZE];
+static char bgr24_asm[PIC_SIZE];
+
+static void rgb24_bgr24_c(unsigned char *src, unsigned char *dst, unsigned long count)
+{
+	unsigned long i;
+
+	for (i = 0; i < count; i++) {
+		dst[3 * i] = src[3 * i +2];
+		dst[3 * i + 1] = src[3*i + 1];
+		dst[3 * i + 2] = src[3*i];
+	}
+}
+
 static void my_fp_neon_test(void)
 {
 	int i;
@@ -47,6 +63,22 @@ static void my_fp_neon_test(void)
 			panic();
 		}
 	}
+
+	/* rgb24 -> bgr24*/
+	for (i = 0; i < PIC_SIZE; i++)
+		rgb24[i] = i & 0xff;
+
+	rgb24_bgr24_c(&rgb24, &bgr24_c, PIC_SIZE);
+	printk("rgb24_c done\n");
+	neon_rgb24_bgr24_test(&rgb24, &bgr24_asm, PIC_SIZE);
+	printk("rgb24_asm done\n");
+	for (i = 0; i < PIC_SIZE; i++) {
+		if (bgr24_c[i] != bgr24_asm[i]) {
+			printk("data error\n");
+			panic();
+		}
+	}
+
 }
 
 void my_ldr_str_test(void)

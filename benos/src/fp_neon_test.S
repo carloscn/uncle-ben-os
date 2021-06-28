@@ -27,3 +27,16 @@ neon_ld2_test:
 	bne 1b
 	ret
 	
+.global neon_rgb24_bgr24_test
+neon_rgb24_bgr24_test:
+	mov x9, xzr
+	1:
+	ld3 {v0.16b, v1.16b, v2.16b}, [x0], 48
+	mov v3.16b, v0.16b
+	mov v0.16b, v2.16b
+	mov v2.16b, v3.16b
+	st3 {v0.16b, v1.16b, v2.16b}, [x1], 48
+	add x9, x9, 48
+	cmp x9, x2
+	bne 1b
+	ret

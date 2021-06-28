@@ -15,3 +15,15 @@ neon_test:
 	bne 1b
 	
 	ret
+
+.global neon_ld2_test
+neon_ld2_test:
+	mov x9, xzr
+	1:
+	ld2 {v0.16b, v1.16b}, [x0], 32
+	st2 {v0.16b, v1.16b}, [x1], 32
+	add x9, x9, 32
+	cmp x9, x2
+	bne 1b
+	ret
+	

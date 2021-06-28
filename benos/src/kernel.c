@@ -18,6 +18,7 @@ extern void access_label_test(void);
 #define SIZE 256
 static char a[SIZE];
 static char b[SIZE];
+static char c[SIZE];
 
 static void my_fp_neon_test(void)
 {
@@ -33,6 +34,15 @@ static void my_fp_neon_test(void)
 
 	for (i = 0; i < SIZE; i++) {
 		if (a[i] != b[i]) {
+			printk("data error\n");
+			panic();
+		}
+	}
+
+	/* LD2/ST2 test */
+	neon_ld2_test(&a, &c, SIZE);
+	for (i = 0; i < SIZE; i++) {
+		if (a[i] != c[i]) {
 			printk("data error\n");
 			panic();
 		}

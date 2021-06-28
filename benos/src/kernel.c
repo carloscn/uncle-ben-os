@@ -79,6 +79,9 @@ static void my_fp_neon_test(void)
 		}
 	}
 
+	/*FMLA*/
+	neon_mla_test(&a);
+
 }
 
 void my_ldr_str_test(void)

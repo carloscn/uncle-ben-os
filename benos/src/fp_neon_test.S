@@ -40,3 +40,29 @@ neon_rgb24_bgr24_test:
 	cmp x9, x2
 	bne 1b
 	ret
+
+.global neon_mla_test
+neon_mla_test:
+	movi v3.16b, 0
+	movi v4.16b, 0
+	ld1 {v0.16b}, [x0], 16
+	ld1 {v1.16b}, [x0], 16
+	mla v3.16b, v0.16b, v1.16b
+	mla v3.16b, v0.16b, v1.16b
+
+	mov w1, #0
+	mov v2.4s[0], w1
+	mov w1, #1
+	mov v2.4s[1], w1
+	mov w1, #2
+	mov v2.4s[2], w1
+	mov w1, #3
+	mov v2.4s[3], w1
+	mov w1, #2
+	mov v5.4s[0], w1
+	mov w1, #3
+	mov v5.4s[1], w1
+
+	mla v4.4s, v2.4s, v5.4s[0]
+	mla v4.4s, v2.4s, v5.4s[1]
+	ret

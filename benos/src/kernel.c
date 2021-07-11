@@ -29,7 +29,7 @@ static void rgb24_bgr24_c(unsigned char *src, unsigned char *dst, unsigned long 
 {
 	unsigned long i;
 
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count/3; i++) {
 		dst[3 * i] = src[3 * i +2];
 		dst[3 * i + 1] = src[3*i + 1];
 		dst[3 * i + 2] = src[3*i];

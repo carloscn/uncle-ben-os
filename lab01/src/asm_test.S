@@ -30,7 +30,7 @@ ldr_test:
 	/* 观测前变基的str，观察x2的值，地址0x400000的值 */
 	mov x2, 0x400000
 	ldr x6, =0x1234abce
-	str x6, [x2, #8]! 
+	str x6, [x2, #8]!
 
 	/* 观测后变基的str，观察x2的值，地址0x500000的值 */
 	mov x2, 0x500000
@@ -59,3 +59,29 @@ my_memcpy_test:
 
 	ret
 
+.global my_memset_test_1
+my_memset_test_1:
+	MOV x1, 0x200000
+	MOV x2, 0x55
+	ADD x0, x1, 32
+
+wrt1:
+	STR x2, [x1], #8
+	CMP x1, x0
+	b.cc wrt1
+
+	ret
+
+.global my_memset_test_2
+my_memset_test_2:
+	MOV x1, 0x200000
+	MOV x2, 0x55
+	ADD x0, x1, 32
+
+wrt2:
+	STP x2, x2, [x1], #16
+	//ADD x1, x1, #16
+	CMP x1, x0
+	b.cc wrt2
+
+	ret

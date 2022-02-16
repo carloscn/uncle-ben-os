@@ -2,12 +2,15 @@
 
 extern void ldr_test(void);
 extern void my_memcpy_test(void);
+extern void my_memset_test_1(void);
+extern void my_memset_test_2(void);
 
 void my_ldr_str_test(void)
 {
 
 	ldr_test();
 	my_memcpy_test();
+	my_memset_test_2();
 
 	memset(0x200004, 0x55, 102);
 }
